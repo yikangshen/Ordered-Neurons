@@ -140,7 +140,7 @@ if __name__ == '__main__':
     # Model parameters.
     parser.add_argument('--data', type=str, default='./data/ptb',
                         help='location of the data corpus')
-    parser.add_argument('--checkpoint', type=str, default='./model/52476941.pt',
+    parser.add_argument('--checkpoint', type=str, default='./model/PTB.pt',
                         help='model checkpoint to use')
     parser.add_argument('--seed', type=int, default=1111,
                         help='random seed')
