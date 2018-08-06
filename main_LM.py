@@ -38,30 +38,20 @@ parser.add_argument('--dropout', type=float, default=0.7,
                     help='dropout applied to output layers (0 = no dropout)')
 parser.add_argument('--idropout', type=float, default=0.4,
                     help='dropout applied to layers (0 = no dropout)')
-parser.add_argument('--rdropout', type=float, default=0.5,
+parser.add_argument('--rdropout', type=float, default=0.4,
                     help='dropout applied to recurrent states (0 = no dropout)')
 parser.add_argument('--tied', action='store_true',
                     help='tie the word embedding and softmax weights')
-parser.add_argument('--hard', action='store_true',
-                    help='use hard sigmoid')
-parser.add_argument('--res', type=int, default=0,
-                    help='number of resnet block in predict network')
 parser.add_argument('--seed', type=int, default=1111,
                     help='random seed')
 parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                     help='report interval')
-parser.add_argument('--save', type=str, default='./model/',
+parser.add_argument('--save', type=str, default='./model/PTB.pt',
                     help='path to save the final model')
 parser.add_argument('--load', type=str, default=None,
                     help='path to save the final model')
-parser.add_argument('--nslots', type=int, default=15,
-                    help='number of memory slots')
-parser.add_argument('--nlookback', type=int, default=5,
-                    help='number of look back steps when predict gate')
-parser.add_argument('--resolution', type=float, default=0.1,
-                    help='syntactic distance resolution')
 parser.add_argument('--device', type=int, default=0,
                     help='select GPU')
 args = parser.parse_args()
@@ -76,8 +66,8 @@ if torch.cuda.is_available():
     else:
         torch.cuda.manual_seed(args.seed)
 
-digits = "".join( [random.choice(string.digits) for i in range(8)] )
-args.save = os.path.join(args.save, digits + '.pt')
+# digits = "".join( [random.choice(string.digits) for i in range(8)] )
+# args.save = os.path.join(args.save, digits + '.pt')
 print('Save to %s' % args.save)
 
 ###############################################################################
@@ -114,7 +104,6 @@ test_data = batchify(corpus.test, eval_batch_size)
 ntokens = len(corpus.dictionary)
 args.ntokens = ntokens
 model = RNNModel.RNNModel(args.ntokens, args.emsize, args.nhid, args.nlayers,
-                       args.nslots, args.nlookback,
                        args.dropout, args.idropout, args.rdropout,
                        args.tied)
 

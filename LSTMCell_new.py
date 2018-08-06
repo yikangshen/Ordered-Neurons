@@ -31,10 +31,6 @@ class LSTMCell(RNNCellBase):
         self.c_norm = LayerNorm(hidden_size)
         self.drop = nn.Dropout(dropout)
 
-        self.dst = nn.Sequential(nn.Linear(hidden_size + input_size, hidden_size),
-                                 # LayerNorm(1),
-                                 nn.Softmax(dim=-1))
-
     def forward(self, input, hidden, rmask):
         hx, cx = hidden
 
@@ -43,9 +39,6 @@ class LSTMCell(RNNCellBase):
         gates = self.ih(input) + self.hh(hx) #+ self.bias
 
         cell, ingate, forgetgate, updategate, outgate = gates.chunk(5, 1)
-
-        # dst = self.dst(torch.cat([input, hx], dim=-1))
-        # fgate = torch.cumsum(dst, dim=-1)
 
         def cumsoftmax(x):
             return torch.cumsum(F.softmax(x, dim=-1), dim=-1)

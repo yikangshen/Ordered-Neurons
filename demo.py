@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description='PyTorch PTB Language Model')
 # Model parameters.
 parser.add_argument('--data', type=str, default='./data/penn',
                     help='location of the data corpus')
-parser.add_argument('--checkpoint', type=str, default='./model/model_LM.pt',
+parser.add_argument('--checkpoint', type=str, default='./model/PTB.pt',
                     help='model checkpoint to use')
 parser.add_argument('--seed', type=int, default=1111,
                     help='random seed')
