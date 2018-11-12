@@ -1,0 +1,13 @@
+abby
+ollie
+oona
+pumpkin
+marcel
+mertz
+and
+or
+not
+(
+)
+<s>
+</s>

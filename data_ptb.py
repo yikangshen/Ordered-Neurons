@@ -24,10 +24,10 @@ rest_file_ids = []
 for id in file_ids:
     if 'WSJ/00/WSJ_0000.MRG' <= id <= 'WSJ/24/WSJ_2499.MRG':
         train_file_ids.append(id)
-    # elif 'WSJ/22/WSJ_2200.MRG' <= id <= 'WSJ/22/WSJ_2299.MRG':
-    #     valid_file_ids.append(id)
-    # elif 'WSJ/23/WSJ_2300.MRG' <= id <= 'WSJ/23/WSJ_2399.MRG':
-    #     test_file_ids.append(id)
+    if 'WSJ/22/WSJ_2200.MRG' <= id <= 'WSJ/22/WSJ_2299.MRG':
+        valid_file_ids.append(id)
+    if 'WSJ/23/WSJ_2300.MRG' <= id <= 'WSJ/23/WSJ_2399.MRG':
+        test_file_ids.append(id)
     # elif 'WSJ/00/WSJ_0000.MRG' <= id <= 'WSJ/01/WSJ_0199.MRG' or 'WSJ/24/WSJ_2400.MRG' <= id <= 'WSJ/24/WSJ_2499.MRG':
     #     rest_file_ids.append(id)
 
@@ -83,10 +83,10 @@ class Corpus(object):
             self.dictionary.rebuild_by_freq()
             pickle.dump(self.dictionary, open(dict_file_name, 'wb'))
 
-        self.train, self.train_sens, self.train_trees = self.tokenize(train_file_ids)
-        self.valid, self.valid_sens, self.valid_trees = self.tokenize(valid_file_ids)
-        self.test, self.test_sens, self.test_trees = self.tokenize(test_file_ids)
-        self.rest, self.rest_sens, self.rest_trees = self.tokenize(rest_file_ids)
+        self.train, self.train_sens, self.train_trees, self.train_nltktrees = self.tokenize(train_file_ids)
+        self.valid, self.valid_sens, self.valid_trees, self.valid_nltktress = self.tokenize(valid_file_ids)
+        self.test, self.test_sens, self.test_trees, self.test_nltktrees = self.tokenize(test_file_ids)
+        self.rest, self.rest_sens, self.rest_trees, self.rest_nltktrees = self.tokenize(rest_file_ids)
 
     def filter_words(self, tree):
         words = []
@@ -105,7 +105,7 @@ class Corpus(object):
             sentences = ptb.parsed_sents(id)
             for sen_tree in sentences:
                 words = self.filter_words(sen_tree)
-                words = ['<s>'] + words + ['</s>']
+                words = ['<eos>'] + words + ['<eos>']
                 for word in words:
                     self.dictionary.add_word(word)
 
@@ -130,11 +130,12 @@ class Corpus(object):
         sens_idx = []
         sens = []
         trees = []
+        nltk_trees = []
         for id in file_ids:
             sentences = ptb.parsed_sents(id)
             for sen_tree in sentences:
                 words = self.filter_words(sen_tree)
-                words = ['<s>'] + words + ['</s>']
+                words = ['<eos>'] + words + ['<eos>']
                 # if len(words) > 50:
                 #     continue
                 sens.append(words)
@@ -143,5 +144,6 @@ class Corpus(object):
                     idx.append(self.dictionary[word])
                 sens_idx.append(torch.LongTensor(idx))
                 trees.append(tree2list(sen_tree))
+                nltk_trees.append(sen_tree)
 
-        return sens_idx, sens, trees
+        return sens_idx, sens, trees, nltk_trees
