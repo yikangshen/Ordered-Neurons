@@ -7,8 +7,6 @@
 
 import argparse
 
-import numpy
-
 import torch
 from torch.autograd import Variable
 
@@ -19,9 +17,13 @@ parser = argparse.ArgumentParser(description='PyTorch PTB Language Model')
 # Model parameters.
 parser.add_argument('--data', type=str, default='./data/penn',
                     help='location of the data corpus')
-parser.add_argument('--checkpoint', type=str, default='model/summ_pred_s10_l1_b2.pt',
+parser.add_argument('--model', type=str, default='LSTM',
+                    help='type of recurrent net (LSTM, QRNN)')
+parser.add_argument('--checkpoint', type=str, default='./model.pt',
                     help='model checkpoint to use')
-parser.add_argument('--words', type=int, default='30',
+parser.add_argument('--outf', type=str, default='generated.txt',
+                    help='output file for generated text')
+parser.add_argument('--words', type=int, default='1000',
                     help='number of words to generate')
 parser.add_argument('--seed', type=int, default=1111,
                     help='random seed')
@@ -47,6 +49,8 @@ if args.temperature < 1e-3:
 with open(args.checkpoint, 'rb') as f:
     model = torch.load(f)
 model.eval()
+if args.model == 'QRNN':
+    model.reset()
 
 if args.cuda:
     model.cuda()
@@ -54,35 +58,21 @@ else:
     model.cpu()
 
 corpus = data.Corpus(args.data)
+ntokens = len(corpus.dictionary)
+hidden = model.init_hidden(1)
+input = Variable(torch.rand(1, 1).mul(ntokens).long(), volatile=True)
+if args.cuda:
+    input.data = input.data.cuda()
 
-while True:
-    hidden = model.init_hidden(1)
-    sen = raw_input('Input a sentences:')
-    words = sen.strip().split()
-    x = numpy.array([corpus.dictionary[w] for w in words])
-    input = Variable(torch.LongTensor(x[:, None]))
-    _, hidden = model(input, hidden)
-
-    input = Variable(torch.zeros(1, 1).long(), volatile=True)
-    input[0, 0] = corpus.dictionary['</s>']
-    if args.cuda:
-        input.data = input.data.cuda()
-
-    words = []
+with open(args.outf, 'w') as outf:
     for i in range(args.words):
         output, hidden = model(input, hidden)
         word_weights = output.squeeze().data.div(args.temperature).exp().cpu()
-
-        # word_idx = torch.multinomial(word_weights, 1)[0]
-
-        word_weights[corpus.dictionary['<unk>']] = -100.
-        _, word_idx = torch.max(word_weights, dim=0)
-        word_idx = word_idx[0]
-
+        word_idx = torch.multinomial(word_weights, 1)[0]
         input.data.fill_(word_idx)
         word = corpus.dictionary.idx2word[word_idx]
 
-        words.append(word)
+        outf.write(word + ('\n' if i % 20 == 19 else ' '))
 
-    print ' '.join(words)
-    print '-' * 30
+        if i % args.log_interval == 0:
+            print('| Generated {}/{} words'.format(i, args.words))
