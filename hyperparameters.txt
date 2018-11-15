@@ -1,0 +1,33 @@
+#######################################################
+# Specify all the model hyperparameters here,
+# then run the training/testing scripts.
+#######################################################
+
+# Main working directory
+workdir=/data/milatmp1/shenyika/LM_syneval_OrderedNeurons
+
+# Directory where the Pytorch word language model code lives (with modifications for the multitask LMs)
+lm_dir=$workdir/word-language-model
+
+# Paths to LM & CCG data
+lm_data_dir=$workdir/data/lm_data
+ccg_data_dir=$workdir/data/ccg_data
+train=train.txt
+valid=valid.txt
+test=test.txt
+
+# Path to save the model
+model_dir=$workdir/models
+
+# TRAINING: Default LM hyperparameters
+epochs=40
+model=LSTM
+log_freq=1000 # how often to display training progress
+batch_size=128 # batch size
+num_hid=650 # number of hidden units
+lr=20.0 # learning rate
+seed=2223 # random seed
+nlayers=2 # number of layers in network
+order=5 # default order for an ngram model
+dropout=0.2
+emsize=200
