@@ -35,5 +35,5 @@ and for parsing we need [Penn Treebank Parsed](https://catalog.ldc.upenn.edu/ldc
   	+ Test Unsupervised Parsing
     ```python test_phrase_grammar.py --cuda```
     
-    The default setting in `main.py` achieves a perplexity of approximately `56.17` on PTB test set, 
+    The default setting in `main.py` achieves a perplexity of approximately `56.17` on PTB test set 
     and unlabeled F1 of approximately `47.7` on WSJ test set.
