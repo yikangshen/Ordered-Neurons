@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.optim.lr_scheduler as lr_scheduler
 
-import LSTMCell
+import ON_LSTM
 
 parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='data/propositionallogic/',
@@ -174,7 +174,7 @@ class Classifier(nn.Module):
         self.padding_idx = ntoken - 1
         self.embedding = nn.Embedding(ntoken, ninp,
                                       padding_idx=self.padding_idx)
-        self.encoder = LSTMCell.LSTMStack(
+        self.encoder = ON_LSTM.ONLSTMStack(
             layer_sizes=[ninp] + [nhid] * nlayers,
             chunk_size=chunk_size,
             dropout=dropout,

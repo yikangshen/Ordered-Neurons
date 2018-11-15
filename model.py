@@ -4,7 +4,7 @@ import torch.nn as nn
 from embed_regularize import embedded_dropout
 from locked_dropout import LockedDropout
 from weight_drop import WeightDrop
-from LSTMCell import LSTMStack
+from ON_LSTM import ONLSTMStack
 
 class RNNModel(nn.Module):
     """Container module with an encoder, a recurrent module, and a decoder."""
@@ -17,7 +17,7 @@ class RNNModel(nn.Module):
         self.drop = nn.Dropout(dropout)
         self.encoder = nn.Embedding(ntoken, ninp)
         assert rnn_type in ['LSTM'], 'RNN type is not supported'
-        self.rnn = LSTMStack(
+        self.rnn = ONLSTMStack(
             [ninp] + [nhid] * (nlayers - 1) + [ninp],
             chunk_size=chunk_size,
             dropconnect=wdrop,

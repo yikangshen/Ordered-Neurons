@@ -53,10 +53,10 @@ def cumsoftmax(x, dim=-1):
     return torch.cumsum(F.softmax(x, dim=dim), dim=dim)
 
 
-class LSTMCell(nn.Module):
+class ONLSTMCell(nn.Module):
 
     def __init__(self, input_size, hidden_size, chunk_size, dropconnect=0., std=False):
-        super(LSTMCell, self).__init__()
+        super(ONLSTMCell, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.chunk_size = chunk_size
@@ -122,14 +122,14 @@ class LSTMCell(nn.Module):
             m.sample_mask()
 
 
-class LSTMStack(nn.Module):
+class ONLSTMStack(nn.Module):
     def __init__(self, layer_sizes, chunk_size, dropout=0., dropconnect=0., std=False):
-        super(LSTMStack, self).__init__()
-        self.cells = nn.ModuleList([LSTMCell(layer_sizes[i],
-                                             layer_sizes[i + 1],
-                                             chunk_size,
-                                             dropconnect=dropconnect,
-                                             std=std)
+        super(ONLSTMStack, self).__init__()
+        self.cells = nn.ModuleList([ONLSTMCell(layer_sizes[i],
+                                               layer_sizes[i + 1],
+                                               chunk_size,
+                                               dropconnect=dropconnect,
+                                               std=std)
                                     for i in range(len(layer_sizes) - 1)])
         self.lockdrop = LockedDropout()
         self.dropout = dropout
