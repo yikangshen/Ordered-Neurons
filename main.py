@@ -87,13 +87,13 @@ if torch.cuda.is_available():
 ###############################################################################
 
 def model_save(fn):
-    with open(os.path.join(os.environ['PT_OUTPUT_DIR'], fn), 'wb') as f:
+    with open(fn, 'wb') as f:
         torch.save([model, criterion, optimizer], f)
 
 
 def model_load(fn):
     global model, criterion, optimizer
-    with open(os.path.join(os.environ['PT_OUTPUT_DIR'], fn), 'rb') as f:
+    with open(fn, 'rb') as f:
         model, criterion, optimizer = torch.load(f)
 
 
@@ -101,7 +101,6 @@ import os
 import hashlib
 
 fn = 'corpus.{}.data'.format(hashlib.md5(args.data.encode()).hexdigest())
-fn = os.path.join(os.environ['PT_OUTPUT_DIR'], fn)
 if os.path.exists(fn):
     print('Loading cached dataset...')
     corpus = torch.load(fn)
