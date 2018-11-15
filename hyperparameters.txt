@@ -4,7 +4,7 @@
 #######################################################
 
 # Main working directory
-workdir=/data/milatmp1/shenyika/LM_syneval_OrderedNeurons
+workdir=/home/hmwv1114/workdisk/workspace/Ordered-Neurons
 
 # Directory where the Pytorch word language model code lives (with modifications for the multitask LMs)
 lm_dir=$workdir/word-language-model

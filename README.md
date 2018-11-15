@@ -30,12 +30,12 @@ Python 3.6, NLTK and PyTorch 0.4 are required for the current codebase.
 3. Scripts and commands
 
   	+ Train Language Modeling
-  	```sh train_LM.sh```
+  	```./train_LM.sh```
 
   	+ Test Model
-    ```sh test_Syn.sh```
+    ```./test_Syn.sh```
     
     + Analyze the results
-    ```sh analyze_resutls.sh```
+    ```./analyze_resutls.sh```
     
     Results can be found at `results/rnn/`
