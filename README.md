@@ -16,7 +16,7 @@ If you use this code or our results in your research, we'd appreciate if you cit
 ```
 
 ## Software Requirements
-Python 3.6, NLTK and PyTorch 0.4 are required for the current codebase.
+Python 3.6 and PyTorch 0.4 are required for the current codebase.
 
 ## Steps
 
