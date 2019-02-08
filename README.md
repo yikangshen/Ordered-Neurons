@@ -25,7 +25,7 @@ Python 3.6, NLTK and PyTorch 0.4 are required for the current codebase.
 2. Download PTB data. Note that the two tasks, i.e., language modeling and unsupervised parsing share the same model 
 strucutre but require different formats of the PTB data. For language modeling we need the standard 10,000 word 
 [Penn Treebank corpus](https://github.com/pytorch/examples/tree/75e435f98ab7aaa7f82632d4e633e8e03070e8ac/word_language_model/data/penn) data, 
-and for parsing we need [Penn Treebank Parsed](https://catalog.ldc.upenn.edu/ldc99t42) data.
+and for parsing we need [Penn Treebank Parsed](https://catalog.ldc.upenn.edu/LDC99T42) data.
 
 3. Scripts and commands
 
