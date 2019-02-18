@@ -114,7 +114,9 @@ class Corpus(object):
         def tree2list(tree):
             if isinstance(tree, nltk.Tree):
                 if tree.label() in word_tags:
-                    return tree.leaves()[0]
+                    w = tree.leaves()[0].lower()
+                    w = re.sub('[0-9]+', 'N', w)
+                    return w
                 else:
                     root = []
                     for child in tree:

@@ -69,6 +69,8 @@ parser.add_argument('--when', nargs="+", type=int, default=[-1],
                     help='When (which epochs) to divide the learning rate by 10 - accepts multiple')
 parser.add_argument('--finetuning', type=int, default=500,
                     help='When (which epochs) to switch to finetuning')
+parser.add_argument('--philly', action='store_true',
+                    help='Use philly cluster')
 args = parser.parse_args()
 args.tied = True
 
@@ -87,12 +89,16 @@ if torch.cuda.is_available():
 ###############################################################################
 
 def model_save(fn):
+    if args.philly:
+        fn = os.path.join(os.environ['PT_OUTPUT_DIR'], fn)
     with open(fn, 'wb') as f:
         torch.save([model, criterion, optimizer], f)
 
 
 def model_load(fn):
     global model, criterion, optimizer
+    if args.philly:
+        fn = os.path.join(os.environ['PT_OUTPUT_DIR'], fn)
     with open(fn, 'rb') as f:
         model, criterion, optimizer = torch.load(f)
 
@@ -101,6 +107,8 @@ import os
 import hashlib
 
 fn = 'corpus.{}.data'.format(hashlib.md5(args.data.encode()).hexdigest())
+if args.philly:
+    fn = os.path.join(os.environ['PT_OUTPUT_DIR'], fn)
 if os.path.exists(fn):
     print('Loading cached dataset...')
     corpus = torch.load(fn)
@@ -265,7 +273,7 @@ try:
                 tmp[prm] = prm.data.clone()
                 prm.data = optimizer.state[prm]['ax'].clone()
 
-            val_loss2 = evaluate(val_data)
+            val_loss2 = evaluate(val_data, eval_batch_size)
             print('-' * 89)
             print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
                   'valid ppl {:8.2f} | valid bpc {:8.3f}'.format(

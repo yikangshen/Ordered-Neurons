@@ -10,7 +10,7 @@ from torch.autograd import Variable
 
 import data
 import data_ptb
-from utils import batchify, get_batch, repackage_hidden
+from utils import batchify, get_batch, repackage_hidden, evalb
 
 from parse_comparison import corpus_stats_labeled, corpus_average_depth
 from data_ptb import word_tags
@@ -126,6 +126,9 @@ def test(model, corpus, cuda, prt=False):
     reca_list = []
     f1_list = []
 
+    pred_tree_list = []
+    targ_tree_list = []
+
     nsens = 0
     word2idx = corpus.dictionary.word2idx
     if args.wsj10:
@@ -168,6 +171,9 @@ def test(model, corpus, cuda, prt=False):
 
             corpus_sys[nsens] = MRG(parse_tree)
             corpus_ref[nsens] = MRG_labeled(sen_nltktree)
+
+            pred_tree_list.append(parse_tree)
+            targ_tree_list.append(sen_tree)
 
             model_out, _ = get_brackets(parse_tree)
             std_out, _ = get_brackets(sen_tree)
@@ -229,6 +235,8 @@ def test(model, corpus, cuda, prt=False):
         print('PP:', correct['PP'], total['PP'])
         print('INTJ:', correct['INTJ'], total['INTJ'])
         print(corpus_average_depth(corpus_sys))
+
+        evalb(pred_tree_list, targ_tree_list)
 
     return f1_list.mean(axis=0)
 
