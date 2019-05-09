@@ -1,5 +1,5 @@
-<<<<<<< HEAD
+numpy>=1.13.3
+matplotlib>=3.0.3
+python_gflags
+nltk
 torch
-=======
-torch
->>>>>>> e6ee33014912d2cdc248ceaf7855ad53fd2edad5
