@@ -179,6 +179,6 @@ class ONLSTMStack(nn.Module):
 if __name__ == "__main__":
     x = torch.Tensor(10, 10, 10)
     x.data.normal_()
-    lstm = LSTMCellStack([10, 10, 10])
+    lstm = ONLSTMStack([10, 10, 10], chunk_size=10)
     print(lstm(x, lstm.init_hidden(10))[1])
 
