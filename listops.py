@@ -133,13 +133,13 @@ if __name__ == "__main__":
                         help='batch based on length')
     parser.add_argument('--no-use_peano', action='store_true',
                         help='batch based on length')
-    parser.add_argument('--emsize', type=int, default=1150,
+    parser.add_argument('--emsize', type=int, default=128,
                         help='size of word embeddings')
     parser.add_argument('--nhid', type=int, default=1150,
                         help='number of hidden units per layer')
     parser.add_argument('--chunk_size', type=int, default=10,
                         help='the size of each chunk')
-    parser.add_argument('--nlayers', type=int, default=1,
+    parser.add_argument('--nlayers', type=int, default=3,
                         help='number of layers')
     parser.add_argument('--lr', type=float, default=0.001,
                         help='initial learning rate')
